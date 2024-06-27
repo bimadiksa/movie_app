@@ -5,12 +5,14 @@ import {
   Image,
   ScrollView,
   StyleSheet,
-  Dimensions,
+  TouchableOpacity,
 } from 'react-native';
-import { useRoute, RouteProp } from '@react-navigation/native';
+import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import { API_ACCESS_TOKEN } from '@env';
 import MovieList from '../components/movies/MovieList';
 import { Movie, MovieRecommendation } from '../types/app';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { FontAwesome } from '@expo/vector-icons';
 
 type RouteParams = {
   params: {
@@ -25,6 +27,8 @@ const MovieDetail = (): JSX.Element => {
   const [recommendations, setRecommendations] = useState<MovieRecommendation[]>(
     [],
   );
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const fetchMovieDetail = async () => {
@@ -63,9 +67,64 @@ const MovieDetail = (): JSX.Element => {
       }
     };
 
+    const checkIsFavorite = async (id: number): Promise<boolean> => {
+      try {
+        const initialData: string | null =
+          await AsyncStorage.getItem('@FavoriteList');
+        if (initialData !== null) {
+          const favMovieList: Movie[] = JSON.parse(initialData);
+          return favMovieList.some((movie) => movie.id === id);
+        }
+        return false;
+      } catch (error) {
+        console.log(error);
+        return false;
+      }
+    };
+
     fetchMovieDetail();
     fetchRecommendations();
+    checkIsFavorite(id).then((result) => setIsFavorite(result));
   }, [id]);
+
+  const addFavorite = async (movie: Movie): Promise<void> => {
+    try {
+      const initialData: string | null =
+        await AsyncStorage.getItem('@FavoriteList');
+      let favMovieList: Movie[] = [];
+
+      if (initialData !== null) {
+        favMovieList = [...JSON.parse(initialData), movie];
+      } else {
+        favMovieList = [movie];
+      }
+
+      await AsyncStorage.setItem('@FavoriteList', JSON.stringify(favMovieList));
+      setIsFavorite(true);
+      navigation.navigate('Home'); // Refresh favorite screen
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const removeFavorite = async (id: number): Promise<void> => {
+    try {
+      const initialData: string | null =
+        await AsyncStorage.getItem('@FavoriteList');
+      if (initialData !== null) {
+        const favMovieList: Movie[] = JSON.parse(initialData);
+        const updatedList = favMovieList.filter((movie) => movie.id !== id);
+        await AsyncStorage.setItem(
+          '@FavoriteList',
+          JSON.stringify(updatedList),
+        );
+        setIsFavorite(false);
+        navigation.navigate('Home'); // Refresh favorite screen
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   if (!movie) {
     return (
@@ -88,6 +147,17 @@ const MovieDetail = (): JSX.Element => {
         <View style={styles.overlay}>
           <Text style={styles.title}>{movie.title}</Text>
           <Text style={styles.rating}>⭐ {movie.vote_average}</Text>
+          <TouchableOpacity
+            onPress={() => {
+              isFavorite ? removeFavorite(movie.id) : addFavorite(movie);
+            }}
+          >
+            <FontAwesome
+              name={isFavorite ? 'heart' : 'heart-o'}
+              size={24}
+              color='red'
+            />
+          </TouchableOpacity>
         </View>
       </View>
       <View style={styles.container}>
@@ -154,15 +224,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     padding: 8,
     borderRadius: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     color: 'white',
+    marginRight: 8,
   },
   rating: {
     fontSize: 18,
     color: 'white',
+    marginRight: 8,
   },
   infoContainer: {
     marginTop: 16,
