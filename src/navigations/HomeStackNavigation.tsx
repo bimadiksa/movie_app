@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from '../screens/Home';
 import MovieDetail from '../screens/MovieDetail';
 import Favorite from '../screens/Favorite';
+import GenreMovies from '../screens/GenreMovies';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,7 @@ export default function HomeStackNavigation(): JSX.Element {
       />
       <Stack.Screen name='MovieDetail' component={MovieDetail} />
       <Stack.Screen name='Favorite' component={Favorite} />
+      <Stack.Screen name='GenreMovies' component={GenreMovies} />
     </Stack.Navigator>
   );
 }
