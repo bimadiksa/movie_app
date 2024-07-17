@@ -1,0 +1,31 @@
+{
+  "cli": {
+    "version": ">= 10.2.0"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": {
+        "API_URL": "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1",
+        "API_ACCESS_TOKEN": "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5NjkwODJiMWI3NWRlZDI2N2QxYjRjZTc4YWYyNGQ0OSIsIm5iZiI6MTcxOTQxMzI5OC42NzU4MTYsInN1YiI6IjY2N2MyNmViYzM3NzM4ZWJhMDU1N2Q1MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.tPfI9yZe8bLP9xfIr9ZjYI1kYW7P9GL3GIzMa2GDtp8"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "env": {
+        "API_URL": "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1",
+        "API_ACCESS_TOKEN": "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5NjkwODJiMWI3NWRlZDI2N2QxYjRjZTc4YWYyNGQ0OSIsIm5iZiI6MTcxOTQxMzI5OC42NzU4MTYsInN1YiI6IjY2N2MyNmViYzM3NzM4ZWJhMDU1N2Q1MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.tPfI9yZe8bLP9xfIr9ZjYI1kYW7P9GL3GIzMa2GDtp8"
+      }
+    },
+    "production": {
+      "env": {
+        "API_URL": "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1",
+        "API_ACCESS_TOKEN": "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5NjkwODJiMWI3NWRlZDI2N2QxYjRjZTc4YWYyNGQ0OSIsIm5iZiI6MTcxOTQxMzI5OC42NzU4MTYsInN1YiI6IjY2N2MyNmViYzM3NzM4ZWJhMDU1N2Q1MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.tPfI9yZe8bLP9xfIr9ZjYI1kYW7P9GL3GIzMa2GDtp8"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
